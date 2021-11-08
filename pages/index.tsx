@@ -26,6 +26,7 @@ export default function Home() {
 
   // Derived state
   const errors = validate();
+  const isValid = Object.entries(errors).every(([, error]) => !error);
 
   function onChange(
     event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -38,17 +39,18 @@ export default function Home() {
       abstract: null,
       title: null,
     };
-    if (status === "Submitted" && !talk.title) {
-      errors.title = "Title is required.";
-    }
-    if (status === "Submitted" && !talk.abstract)
-      errors.abstract = "Abstract is required.";
+    if (!talk.title) errors.title = "Title is required.";
+    if (!talk.abstract) errors.abstract = "Abstract is required.";
     return errors;
   }
 
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault(); // stop postback
     setStatus("Submitted");
+    if (!isValid) return;
+    // TODO: Actually save stuff.
+    setStatus("Complete");
+    setTalk(newTalk); // Clear the form
   }
 
   return (
@@ -73,13 +75,15 @@ export default function Home() {
               value={talk.title}
               onChange={onChange}
             />
-            {errors.title && <p>{errors.title}</p>}
+            {errors.title && status === "Submitted" && <p>{errors.title}</p>}
           </div>
           <div>
             <label htmlFor="abstract">Abstract</label>
             <br />
             <textarea id="abstract" value={talk.abstract} onChange={onChange} />
-            {errors.abstract && <p>{errors.abstract}</p>}
+            {errors.abstract && status === "Submitted" && (
+              <p>{errors.abstract}</p>
+            )}
           </div>
           <input type="submit" value="Submit talk" />
         </form>

@@ -1,6 +1,6 @@
 /// <reference types="cypress" />
 
-it("should require all fields", () => {
+it.only("should require all fields", () => {
   cy.visit("http://localhost:3000");
 
   // Assure that error messages don't display on initial load
