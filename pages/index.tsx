@@ -23,6 +23,7 @@ type Status = "Idle" | "Submitted" | "Complete";
 export default function Home() {
   const [status, setStatus] = useState<Status>("Idle");
   const [talk, setTalk] = useState(newTalk);
+  const [talks, setTalks] = useState<Talk[]>([]);
 
   // Derived state
   const errors = validate();
@@ -49,6 +50,7 @@ export default function Home() {
     setStatus("Submitted");
     if (!isValid) return;
     // TODO: Actually save stuff.
+    setTalks([...talks, talk]);
     setStatus("Complete");
     setTalk(newTalk); // Clear the form
   }
@@ -63,6 +65,15 @@ export default function Home() {
 
       <main className={styles.main}>
         <h1 className={styles.title}>Speak at ConnectTech!</h1>
+
+        <section>
+          <h2>Submitted Talks</h2>
+          <ul>
+            {talks.map((t) => (
+              <li key={t.title}>{t.title}</li>
+            ))}
+          </ul>
+        </section>
 
         <form onSubmit={handleSubmit}>
           <h2>Submit a talk</h2>
