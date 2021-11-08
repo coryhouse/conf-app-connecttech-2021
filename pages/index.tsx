@@ -1,6 +1,6 @@
 import Head from "next/head";
 import Image from "next/image";
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, FormEvent, useState } from "react";
 import styles from "../styles/Home.module.css";
 
 type Talk = {
@@ -16,8 +16,14 @@ const newTalk: Talk = {
 export default function Home() {
   const [talk, setTalk] = useState(newTalk);
 
-  function onChange(event: ChangeEvent<HTMLInputElement>) {
+  function onChange(
+    event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) {
     setTalk({ ...talk, [event.target.id]: event.target.value });
+  }
+
+  function handleSubmit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault(); // stop postback
   }
 
   return (
@@ -31,7 +37,7 @@ export default function Home() {
       <main className={styles.main}>
         <h1 className={styles.title}>Speak at ConnectTech!</h1>
 
-        <form>
+        <form onSubmit={handleSubmit}>
           <h2>Submit a talk</h2>
           <div>
             <label htmlFor="title">Title</label>
