@@ -5,7 +5,9 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "cy-open": "cypress open",
+    "cy": "start-server-and-test dev http://localhost:3000 cy-open"
   },
   "dependencies": {
     "@testing-library/cypress": "^8.0.1",
